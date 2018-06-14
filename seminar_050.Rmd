@@ -29,9 +29,9 @@ library(sjPlot) # ещё больше графиков
 library(lmtest) # диагностика линейных моделей
 library(Ecdat) # много-много разных наборов данных
 library(sjstats) # удобные мелкие функции для работы с моделями
-library(sandwich) # оценка Var для гетероскедастичности
+ library(sandwich) # оценка Var для гетероскедастичности
 library(AER) # работа с инструментальными переменными
-  ```
+```
 
 Возьмём набор данных об изменении пульса студентов до и после упражнений.
 Его описание доступно по [ссылке](http://www.statsci.org/data/oz/ms212.html).
@@ -56,8 +56,7 @@ skim(pulse)
 ```{r}
 pulse_fct <- pulse %>%
   mutate_at(vars(-Weight, -Height, -Age, -Pulse1, -Pulse2), factor)
-pulse_fct <- pulse %>%
-  mutate_at(vars('Pulse'), factor)
+
 ```
 
 И теперь можно приступать к регрессиям.
@@ -72,7 +71,7 @@ model_r <- lm(data = pulse_fct, Pulse2 ~ Pulse1)
 
 ```{r}
 summary(model_r)
- ```
+```
 
 - На сколько в среднем отличается пульс после упражнений у двух студентов, если
 пульс до упражнений у них отличается на единицу?
@@ -127,7 +126,7 @@ coeftest(model_r)
 ```{r}
 ggplot(data = pulse_fct, aes(x = Pulse1, y = Pulse2)) +
   geom_point() +
-  geom_smooth(method = 'lm')
+  geom_smooth(method = 'lm',)
 ```
 
 * Упражнение 2.
@@ -204,11 +203,17 @@ D_i = \frac{\sum_{j=1}^n(\hat y_j - \hat y_j^{(-i)})^2}{k\hat\sigma^2},
 Затем визуилизируем получившиеся доверительные интервалы командой `sjp.lm()` из пакета `sjPlot`.
 
 ```{r}
-coefci(model_ur)
-plot_model(model_ur, ci.lvl = 0.9)
+coefci(model_ur, level=0.8)
+plot_model(model_ur, type="std", ci.lvl = 0.9)
 ```
 
 - Загляните в справку :) Какая опция функции `coefci` отвечает за уровень доверия?
+
+диагностика мультиколлинеарности 
+коэффициенты вздутия дисперсии 
+```{r}
+vif(model_ur)
+```
 
 * Упражнение 4.
 
