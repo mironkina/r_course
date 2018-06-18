@@ -2,7 +2,7 @@
 title: 'Семинар 6. Красотища'
 date: 'Июнь, 18, 2018'
 output:
-  html_document:
+    html_document:
     keep_md: no
     number_sections: yes
     toc: yes
@@ -13,6 +13,9 @@ bibliography: references.bib
 csl: journal-of-econometrics.csl
 ---
 
+<!--
+csl: journal-of-econometrics.csl
+-->
 
 
 Шаманское заклинание для настройки глобальных опций отчёта:
@@ -58,6 +61,7 @@ library(estimatr) # модели с робастными ошибками
 Загружаем данные и объявляем переменные факторными:
 ```{r}
 pulse <- import('data/pulse.txt')
+
 pulse_fct <- pulse %>%
   mutate_at(vars(-Weight, -Height, -Age, -Pulse1, -Pulse2), factor)
 ```
@@ -66,18 +70,20 @@ pulse_fct <- pulse %>%
 ```{r}
 model_r <- lm(data = pulse_fct, Pulse2 ~ Pulse1)
 model_ur <- lm(data = pulse_fct, Pulse2 ~ Weight + Pulse1 + Ran + Smokes)
+summary(model_ur)
 ```
 
 Способ с переоцениванием модели:
 ```{r}
 model_r_rob <- lm_robust(data = pulse_fct, Pulse2 ~ Pulse1)
-model_ur_rob <- lm_robust(data = pulse_fct, Pulse2 ~ Weight + Pulse1 + Ran + Smokes)
+model_ur_rob <- lm_robust(data = pulse_fct, Pulse2 ~ Weight + Pulse1 + Ran + Smokes, se_type = "HC1")
+summary(model_ur_rob)
 ```
 
 Проверка гипотез и доверительные интервалы с робастно оценёнными моделями:
 ```{r}
 coeftest(model_ur_rob)
-coefci(model_ur_rob)
+coefci(model_ur_rob, level = 0.9)
 ```
 
 Сравнение двух робастно оценённых моделей:
@@ -115,15 +121,19 @@ waldtest(model_r, model_ur, vcov = vcovHC)
 А затем сравните две модели `house_r` и `house_ur` с учётом поправки на гетероскедастичность.
 
 ```{r}
-# coeftest(___, vcov. = ___, type = ____)
+# coeftest(house_ur, vcov. = vcovHC(house_ur, type = "HC3")
 # waldtest(___, ___, vcov =  vcovHC)
 ```
 
+Тест на гетероскедастичность
+```{r}
+bptest(Pulse2 ~ Pulse1 + Smokes, varformula = ~ Smokes, data = pulse_fct)
+```
 
 
 # Инструментальные переменные
 
-
+\
 Исследователи всегда мечтают обнаружить не просто статистическую связь, а причинно-следственную.
 Проще всего было бы обнаружить связь с помощью рандомизированного эксперимента:
 поделить случайно индивидов случайно на две группы, одну попросить стирать обычным порошком,
@@ -181,7 +191,7 @@ model_iv <- ivreg(data = labor,
   log(wagew) ~ educw + experience + I(experience^2) |
     experience + I(experience^2) + educwm + educwf)
 summary(model_iv, diagnostics = TRUE)
-```
+ ```
 
 После вертикальной палочки `|` в команде `ivreg` указывают экзогенные переменные,
 используемые в качестве инструментов.
@@ -219,7 +229,7 @@ model_iv_robust <- iv_robust(data = labor,
   log(wagew) ~ educw + experience + I(experience^2) |
     experience + I(experience^2) + educwm + educwf)
 summary(model_iv_robust)
-```
+ ```
 
 * Упражнение 9.
 
@@ -305,6 +315,8 @@ ggplot(data = pulse_fct, aes(x = Pulse1, y = Pulse2)) +
 
 Для примера процитируем несколько источников,
 @afanasyev92, @cobb2011teaching, @microsoftProject2008, @doe:website.
+
+Сошлемся на старика Эйнштейна,@einstein1916foundation. 
 
 Другие стилевые заготовки для оформления цитат можно скачать в архиве [zotero](https://www.zotero.org/styles).
 
