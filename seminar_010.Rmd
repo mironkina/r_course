@@ -209,8 +209,8 @@ skim(diamonds2)
 - Чему равна их средняя цена?
 
 ```{r}
-# diamonds3 <- filter(___, ___)
-# skim(___)
+diamonds3 <- filter(df, x>5)
+skim(diamonds3)
 ```
 
 Перейдём к созданию новых переменных!
@@ -231,8 +231,8 @@ skim(diamonds4)
 - Чему равна медианная стоимость одного карата?
 
 ```{r}
-# diamonds5 <- mutate(diamonds, carat_price = ___)
-# skim(___)
+diamonds5 <- mutate(diamonds, carat_price = price/carat)
+skim(diamonds5)
 ```
 
 
@@ -252,8 +252,8 @@ diamonds6
 Отсортируйте бриллианты по массе и отберите самые нижние пять строк.
 
 ```{r}
-# diamonds7 <- arrange(___, ___) %>% ___(5)
-# diamonds7
+diamonds7 <- arrange(df, carat) %>% tail(5)
+diamonds7
 ```
 
 
@@ -272,19 +272,19 @@ diamonds6
 
 Проверьте, читаются ли эти файлы командой `import()`
 ```{r}
-# data_utf <- import('rus_utf8.csv')
-# glimpse(___)
-# data_cp <- import('rus_cp1251.csv')
-# glimpse(___)
+data_utf <- import('rus_utf8.csv')
+glimpse(data_utf)
+data_cp <- import('rus_cp1251.csv')
+glimpse(data_cp)
 ```
 - В каком случае русские буквы читаются без кракозябр?
 
 Здесь на помощь приходят другие пакеты, например, функция `read_csv` из пакета `readr`:
 ```{r}
-# data_cp2 <- read_csv('rus_cp1251.csv', locale = locale(encoding = 'CP1251'))
-# glimpse(___)
-# data_utf2 <- read_csv('rus_utf8.csv', locale = locale(encoding = 'UTF8'))
-# glimpse(___)
+data_cp2 <- read_csv('rus_cp1251.csv', locale = locale(encoding = 'CP1251'))
+glimpse(data_cp2)
+data_utf2 <- read_csv('rus_utf8.csv', locale = locale(encoding = 'UTF8'))
+glimpse(data_utf2)
 ```
 
 
@@ -312,7 +312,7 @@ export(diamonds, 'diamonds.csv')
 
 Экспортируйте набор данных `diamonds` в эксельчик.
 ```{r}
-# export(___, ___)
+export(diamonds, 'diamonds.xlsx')
 ```
 Не забудьте, что имя файла должно быть в кавычках. Двойных или одинарных - не важно.
 
