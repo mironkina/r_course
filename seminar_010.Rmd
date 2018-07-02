@@ -69,7 +69,7 @@ library(DataExplorer)
 и на последние командой `tail()`.
 
 ```{r}
-some <- import('manipulate.sav')
+some <- import('data/manipulate.sav')
 glimpse(some)
 head(some)
 tail(some)
@@ -86,7 +86,7 @@ tail(some)
 - Сколько наблюдений?
 
 ```{r}
-cola <- import('cola.dta') 
+cola <- import('data/cola.dta') 
 glimpse(cola)
 head(cola)
 tail(cola)
@@ -98,7 +98,7 @@ tail(cola)
 
 ```{r}
 library(hexView) # подключаем специальный пакет для чтения данных eviews
-housing <- readEViews('housing.wf1')
+housing <- readEViews('data/housing.wf1')
 glimpse(housing)
 ```
 
@@ -272,18 +272,18 @@ diamonds7
 
 Проверьте, читаются ли эти файлы командой `import()`
 ```{r}
-data_utf <- import('rus_utf8.csv')
+data_utf <- import('data/rus_utf8.csv')
 glimpse(data_utf)
-data_cp <- import('rus_cp1251.csv')
+data_cp <- import('data/rus_cp1251.csv')
 glimpse(data_cp)
 ```
 - В каком случае русские буквы читаются без кракозябр?
 
 Здесь на помощь приходят другие пакеты, например, функция `read_csv` из пакета `readr`:
 ```{r}
-data_cp2 <- read_csv('rus_cp1251.csv', locale = locale(encoding = 'CP1251'))
+data_cp2 <- read_csv('data/rus_cp1251.csv', locale = locale(encoding = 'CP1251'))
 glimpse(data_cp2)
-data_utf2 <- read_csv('rus_utf8.csv', locale = locale(encoding = 'UTF8'))
+data_utf2 <- read_csv('data/rus_utf8.csv', locale = locale(encoding = 'UTF8'))
 glimpse(data_utf2)
 ```
 
